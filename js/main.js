@@ -60,19 +60,17 @@ function animateParticles() {
   }
 }
 
-  const loader = new THREE.FontLoader();
-  loader.load('path/to/font.json', function (font) {
-      const textGeometry = new THREE.TextGeometry('YourFirstName', {
-          font: font,
-          size: 5,
-          height: 1,
-          curveSegments: 12,
-      });
-      const textMaterial = new THREE.MeshBasicMaterial({ color: 0x8B4513 });  // Wooden color
-      const textMesh = new THREE.Mesh(textGeometry, textMaterial);
-      scene.add(textMesh);
-  });
-  
+function cube() {
+  const texture = new THREE.TextureLoader().load("assets/textures/wooden.jpg");
+  const cubeMaterial = new THREE.MeshBasicMaterial({ map: texture });
+  const cubeGeometry = new THREE.BoxGeometry(10, 5, 5, 5);
+  cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterial);
+
+  cubeMesh.position.z = -5;
+  camera.position.z = 15;
+
+  scene.add(cubeMesh);
+}
 
 function lighting() {
   const light = new THREE.HemisphereLight(0x780a44, 0x1c3020, 1);
