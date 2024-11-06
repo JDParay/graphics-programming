@@ -8,8 +8,11 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
+
 let cubeMesh = new THREE.Mesh();
 let stars, starGeo;
+let colorChangeInterval = 3000; // 3 seconds
+let lastColorChange = Date.now();
 
 lighting();
 cube();
@@ -41,9 +44,21 @@ function particles() {
 }
 
 function animateParticles() {
-    starGeo.verticesNeedUpdate = true;
-    stars.position.y -= 0.9;
+  stars.geometry.attributes.position.array.forEach((_, i) => {
+    if (i % 3 === 1) {
+      stars.geometry.attributes.position.array[i] -= 0.9;
+      if (stars.geometry.attributes.position.array[i] < -300) {
+        stars.geometry.attributes.position.array[i] = 300;
+      }
+    }
+  });
+  stars.geometry.attributes.position.needsUpdate = true;
+
+  if (Date.now() - lastColorChange >= colorChangeInterval) {
+    stars.material.color.setHex(Math.random() * 0xffffff);
+    lastColorChange = Date.now();
   }
+}
 
 function cube() {
   const texture = new THREE.TextureLoader().load("assets/textures/wooden.jpg");
